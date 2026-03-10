@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Question } from '../types';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Save } from 'lucide-react';
 
 interface QuestionStepProps {
   question: Question;
@@ -9,6 +9,7 @@ interface QuestionStepProps {
   onSelect: (value: number) => void;
   onBack: () => void;
   onNext: () => void;
+  onSave: () => void;
   isFirst: boolean;
   isLast: boolean;
   truckCount: number;
@@ -20,6 +21,7 @@ export const QuestionStep: React.FC<QuestionStepProps> = ({
   onSelect, 
   onBack, 
   onNext,
+  onSave,
   isFirst,
   isLast,
   truckCount
@@ -31,6 +33,14 @@ export const QuestionStep: React.FC<QuestionStepProps> = ({
       exit={{ opacity: 0, x: -20 }}
       className="w-full max-w-2xl mx-auto"
     >
+      <div className="flex justify-end mb-4">
+        <button 
+          onClick={onSave}
+          className="text-[#00E5FF]/60 hover:text-[#00E5FF] transition-all flex items-center gap-2 text-xs uppercase tracking-widest font-mono"
+        >
+          <Save size={14} /> Save Progress
+        </button>
+      </div>
       {question.id === 3 && (
         <motion.div 
           initial={{ opacity: 0, y: 10 }}

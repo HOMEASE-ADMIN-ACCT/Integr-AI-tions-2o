@@ -1,13 +1,15 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Truck, Zap, Droplets, Hammer, Lightbulb } from 'lucide-react';
+import { Truck, Zap, Droplets, Hammer, Lightbulb, ChevronLeft, Save } from 'lucide-react';
 import { Industry } from '../types';
 
 interface CalibrationStepProps {
   industry: Industry;
   truckCount: number;
   onUpdate: (data: { industry?: Industry; truckCount?: number }) => void;
+  onBack: () => void;
   onNext: () => void;
+  onSave: () => void;
 }
 
 const industries: { name: Industry; icon: any }[] = [
@@ -17,7 +19,7 @@ const industries: { name: Industry; icon: any }[] = [
   { name: 'Electrical', icon: Lightbulb },
 ];
 
-export const CalibrationStep: React.FC<CalibrationStepProps> = ({ industry, truckCount, onUpdate, onNext }) => {
+export const CalibrationStep: React.FC<CalibrationStepProps> = ({ industry, truckCount, onUpdate, onBack, onNext, onSave }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -25,6 +27,21 @@ export const CalibrationStep: React.FC<CalibrationStepProps> = ({ industry, truc
       exit={{ opacity: 0, y: -20 }}
       className="glass-card p-8 md:p-12 w-full max-w-xl mx-auto"
     >
+      <div className="flex justify-between items-center mb-8">
+        <button 
+          onClick={onBack}
+          className="text-white/40 hover:text-white transition-all flex items-center gap-2 text-xs uppercase tracking-widest font-mono"
+        >
+          <ChevronLeft size={14} /> Back
+        </button>
+        <button 
+          onClick={onSave}
+          className="text-[#00E5FF]/60 hover:text-[#00E5FF] transition-all flex items-center gap-2 text-xs uppercase tracking-widest font-mono"
+        >
+          <Save size={14} /> Save Progress
+        </button>
+      </div>
+
       <h2 className="text-3xl font-bold mb-8 text-center">Calibrate Your Shop</h2>
       
       <div className="space-y-10">

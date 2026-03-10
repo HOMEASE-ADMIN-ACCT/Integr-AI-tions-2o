@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 import { AppShell } from './components/AppShell';
 import { HeroSection } from './components/HeroSection';
 import { CalibrationStep } from './components/CalibrationStep';
@@ -8,6 +9,7 @@ import { QuestionStep } from './components/QuestionStep';
 import { ProcessingEngine } from './components/ProcessingEngine';
 import { ResultsDashboard } from './components/ResultsDashboard';
 import { AppState, Industry, QUESTIONS } from './types';
+import { Save } from 'lucide-react';
 
 const STORAGE_KEY = 'integr-ai-tion-state';
 
@@ -31,6 +33,8 @@ export default function App() {
       isSnapshotOpen: false
     };
   });
+
+  const [showSavedToast, setShowSavedToast] = useState(false);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -60,6 +64,12 @@ export default function App() {
     updateState({ currentStep: Math.max(0, state.currentStep - 1) });
   };
 
+  const handleSave = () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    setShowSavedToast(true);
+    setTimeout(() => setShowSavedToast(false), 3000);
+  };
+
   const handleAnswer = (value: number) => {
     const newAnswers = { ...state.answers, [state.currentStep - 2]: value };
     updateState({ 
@@ -78,7 +88,9 @@ export default function App() {
             industry={state.industry}
             truckCount={state.truckCount}
             onUpdate={(data) => updateState(data)}
+            onBack={handleBack}
             onNext={handleNext}
+            onSave={handleSave}
           />
         );
       case 2:
@@ -96,6 +108,7 @@ export default function App() {
               onSelect={handleAnswer}
               onBack={handleBack}
               onNext={handleNext}
+              onSave={handleSave}
               isFirst={qIndex === 0}
               isLast={qIndex === QUESTIONS.length - 1}
               truckCount={state.truckCount}
@@ -125,6 +138,18 @@ export default function App() {
         truckCount={state.truckCount}
         onClose={() => updateState({ isSnapshotOpen: false, currentStep: 2 })}
       />
+      
+      {/* Saved Toast */}
+      {showSavedToast && (
+        <motion.div 
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
+          className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-[#00E5FF] text-black px-6 py-3 rounded-full font-bold shadow-[0_0_20px_rgba(0,229,255,0.4)] z-50 flex items-center gap-2"
+        >
+          <Save size={18} /> Progress Saved
+        </motion.div>
+      )}
     </AppShell>
   );
 }
